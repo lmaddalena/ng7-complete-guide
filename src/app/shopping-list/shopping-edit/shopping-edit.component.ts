@@ -1,5 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
+
 import { Ingredient } from 'src/app/shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list.service';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -8,11 +15,10 @@ import { Ingredient } from 'src/app/shared/ingredient.model';
 })
 export class ShoppingEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(private shoppingListService: ShoppingListService) { }
 
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChild('amountInput') amountInput: ElementRef;
-  @Output() ingredientAdded = new EventEmitter<Ingredient>();
 
   ngOnInit() {
   }
@@ -21,7 +27,7 @@ export class ShoppingEditComponent implements OnInit {
     // utilizzare const al post di let per evitare di modificare il valore della variabile
     const name: string = this.nameInput.nativeElement.value;
     const amount: number = this.amountInput.nativeElement.value;
-
-    this.ingredientAdded.emit(new Ingredient(name, amount));
+    const newIngredient = new Ingredient(name, amount);
+    this.shoppingListService.addIngredient(newIngredient);
   }
 }
